@@ -1,7 +1,6 @@
 package com.colytra.cvhelper.core.color;
 
 public class ColorDifference {
-    private int mismatch;
     private int redDiff;
     private int greenDiff;
     private int blueDiff;
@@ -9,6 +8,7 @@ public class ColorDifference {
     public ColorDifference(int difference) {
         this.redDiff = difference;
         this.greenDiff = difference;
+        this.blueDiff = difference;
     }
 
     public ColorDifference(int mismatch, int red, int green, int blue) {
