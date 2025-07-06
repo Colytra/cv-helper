@@ -11,7 +11,7 @@ public class ColorDifference {
         this.blueDiff = difference;
     }
 
-    public ColorDifference(int mismatch, int red, int green, int blue) {
+    public ColorDifference(int red, int green, int blue) {
         this.redDiff = red;
         this.greenDiff = green;
         this.blueDiff = blue;
