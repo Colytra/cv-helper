@@ -4,6 +4,8 @@ import com.colytra.cvhelper.core.Point;
 import com.colytra.cvhelper.core.Rect;
 import com.colytra.cvhelper.core.Size;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 public class Matrix {
     public static int COL_MAJOR_ORDER = 1;
     public static int ROW_MAJOR_ORDER = 0;
@@ -186,6 +188,25 @@ public class Matrix {
         }
         builder.delete(builder.length() - 4,builder.length()).append("]");
         return builder.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass())
+            return false;
+
+        Matrix obj = (Matrix) o;
+        if (cols != obj.getCols() || rows != obj.getRows())
+            return false;
+
+        AtomicBoolean b = new AtomicBoolean(true);
+
+        forEach(((col, row) -> {
+            if (mat[col][row] != obj.get(col,row)) {
+                b.set(false);
+            }
+        }));
+        return b.get();
     }
 
     @Override
