@@ -12,7 +12,6 @@ public class ColorDifference {
     }
 
     public ColorDifference(int mismatch, int red, int green, int blue) {
-        this.mismatch = mismatch;
         this.redDiff = red;
         this.greenDiff = green;
         this.blueDiff = blue;
@@ -40,13 +39,5 @@ public class ColorDifference {
 
     public void setRedDiff(int redDiff) {
         this.redDiff = redDiff;
-    }
-
-    public int getMismatch() {
-        return mismatch;
-    }
-
-    public void setMismatch(int mismatch) {
-        this.mismatch = mismatch;
     }
 }
