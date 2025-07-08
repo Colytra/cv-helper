@@ -57,31 +57,6 @@ public class Searcher {
         return points;
     }
 
-//    public static List<Point> findAll(Matrix matrix, Matrix subMat, ColorDifference difference, int mismatch, int skip) {
-//        List<Point> res = new ArrayList<>();
-//        if (!matrix.isSubMatrix(subMat))
-//            return res;
-//        boolean bool;
-//        for (int i = 0; i <= matrix.getRows() - subMat.getRows(); i++) {
-//            bool = false;
-//            for (int j = 0; j <= matrix.getCols() - subMat.getCols(); j++) {
-//                if (matchesAt(matrix, subMat, i,j,difference,mismatch)) {
-//
-//                    res.add(new Point(j,i));
-//                    bool = true;
-//                    j += skip;
-//                }
-//            }
-//            if (bool) i += skip;
-//        }
-//        return res;
-//    }
-
-    static Matrix m1;
-    public static Matrix m2 = new Matrix(21,21);
-    static boolean aBoolean = true;
-    static boolean aBoolean2 = true;
-
     public static List<Point> findAll(Matrix matrix, Matrix subMat, ColorDifference difference, int mismatch, int skip) {
         List<Point> res = new ArrayList<>();
 
@@ -89,8 +64,6 @@ public class Searcher {
             return res;
         boolean bool;
 
-        m1 = new Matrix(matrix.getCols() - subMat.getCols(),matrix.getRows() - subMat.getRows());
-        System.out.println(matrix.getCols() - subMat.getCols());
         for (int i = 0; i <= matrix.getRows() - subMat.getRows(); i++) {
             bool = false;
             for (int j = 0; j <= matrix.getCols() - subMat.getCols(); j++) {
@@ -101,12 +74,8 @@ public class Searcher {
                     j += skip;
                 }
             }
-            if (i >= (matrix.getRows() - subMat.getRows()) / 2)
-                aBoolean2 = false;
             if (bool) i += skip;
         }
-        ImageMatrix.saveAsImage(m2,"rtrwer/MAT3" + ".png" ,"PNG");
-        ImageMatrix.saveAsImage(m1,"rtrwer/MAT.png","PNG");
 
         return res;
     }
@@ -126,22 +95,8 @@ public class Searcher {
                 } else if (matrix.get(startCol + j, startRow + i) != subMat.get(j, i)) {
                     x++;
                 }
-
-                if (i <= subMat.getRows() / 2) {
-                    if (aBoolean)
-                        m2.put(j,i,subMat.get(j, i));
-                    if (aBoolean2) {
-                        try {
-                            m1.put(startCol + j, startRow + i, matrix.get(startCol + j, startRow + i));
-                        } catch (IllegalArgumentException ignore) {
-                            System.out.println(1);
-                        }
-                    }
-                }
-
             }
         }
-        aBoolean = false;
         return x <= mismatch;
     }
 }

@@ -11,9 +11,9 @@ public class Matrix {
     public static int ROW_MAJOR_ORDER = 0;
 
     private int[][] mat;
-    //height
+
     private int rows;
-    //width
+
     private int cols;
 
     public Matrix() {}
@@ -50,21 +50,37 @@ public class Matrix {
         }
     }
 
+    public void forEach(SimpleMatrixFunction function) {
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                function.run((i * rows) + j);
+            }
+        }
+    }
+
     public boolean isEmpty() {
         return mat == null;
     }
 
     public void forEach(int major, MatrixFunction function) {
         if (major == ROW_MAJOR_ORDER) {
-            for (int i = 0; i < rows; i++) {
-                for (int j = 0; j < cols; j++) {
-                    function.run(j, i);
-                }
-            }
+            this.forEach(function);
         } else if (major == COL_MAJOR_ORDER){
             for (int i = 0; i < cols; i++) {
                 for (int j = 0; j < rows; j++) {
                     function.run(i,j);
+                }
+            }
+        }
+    }
+
+    public void forEach(int major, SimpleMatrixFunction function) {
+        if (major == ROW_MAJOR_ORDER) {
+            this.forEach(function);
+        } else if (major == COL_MAJOR_ORDER){
+            for (int i = 0; i < cols; i++) {
+                for (int j = 0; j < rows; j++) {
+                    function.run((i * cols) + j);
                 }
             }
         }
@@ -112,8 +128,12 @@ public class Matrix {
         return res;
     }
 
+    public int[][] getMat() {
+        return mat;
+    }
+
     public Matrix getCol(int col) {
-        if ((col > (cols - 1) || col < 0)) throw new IllegalArgumentException("Position goes beyond the dimensions! col=" + col + " limit=" + (cols - 1));
+        if ((col > (cols - 1) || col < 0)) MatrixAccessInvalidValue.exception(this,col);
 
         Matrix res = new Matrix(1,rows);
         res.put(0,0,this.mat[col]);
@@ -121,7 +141,7 @@ public class Matrix {
     }
 
     public Matrix getRow(int row) {
-        if ((row > (rows - 1) || row < 0 )) throw new IllegalArgumentException("Position goes beyond the dimensions! row=" + row);
+        if ((row > (rows - 1) || row < 0 )) MatrixAccessInvalidValue.exception(row,this);
         Matrix res = new Matrix(cols,1);
 
         for (int i = 0; i < cols; i++) {
@@ -131,7 +151,7 @@ public class Matrix {
     }
 
     public void put(int col, int row, int... data) {
-        if ((row > (rows - 1) || col > (cols - 1)) || col < 0 || row < 0 || (row * rows) + col + data.length > rows * cols) throw new IllegalArgumentException("Position goes beyond the dimensions! col=" + col + ", row=" + row);
+        if ((row > (rows - 1) || col > (cols - 1)) || col < 0 || row < 0 || (row * rows) + col + data.length > rows * cols) MatrixAccessInvalidValue.exception(col,row,this);
 
         int x;
         for (int i = 0; i < data.length; i++) {
@@ -141,12 +161,12 @@ public class Matrix {
     }
 
     public void put(int col, int row, int data) {
-        if (row > (rows - 1) || col > (cols - 1) || col < 0 || row < 0) throw new IllegalArgumentException("Position goes beyond the dimensions! col=" + col + ", row=" + row);
+        if (row > (rows - 1) || col > (cols - 1) || col < 0 || row < 0) MatrixAccessInvalidValue.exception(col,row,this);
         this.mat[col][row] = data;
     }
 
     public int get(int col, int row) {
-        if (row > rows || col > cols) throw new IllegalArgumentException("Position goes beyond the dimensions! col=" + col + ", row=" + row + " max_size=" + cols + "," + rows);
+        if (row > rows || col > cols) MatrixAccessInvalidValue.exception(col,row,this);
         return mat[col][row];
     }
 
@@ -235,5 +255,26 @@ public class Matrix {
     @Override
     public String toString() {
         return "Matrix:{columns=" + this.cols + ", rows=" + this.rows + "}";
+    }
+}
+
+class MatrixAccessInvalidValue extends RuntimeException {
+    public MatrixAccessInvalidValue(String msg) {
+        super(msg);
+    }
+    public static void exception(int col, int row, Matrix matrix) {
+        int maxCols = matrix.getCols();
+        int maxRows = matrix.getRows();
+        throw new MatrixAccessInvalidValue("Position goes beyond the dimensions! column=" + col + ", row=" + row + " max size=" + maxCols + "," + maxRows);
+    }
+    public static void exception(int row, Matrix matrix) {
+        int maxCols = matrix.getCols();
+        int maxRows = matrix.getRows();
+        throw new MatrixAccessInvalidValue("Position goes beyond the dimensions! row=" + row + " max rows " + maxRows);
+    }
+    public static void exception(Matrix matrix, int col) {
+        int maxCols = matrix.getCols();
+        int maxRows = matrix.getRows();
+        throw new MatrixAccessInvalidValue("Position goes beyond the dimensions! column=" + col + " max columns " + maxCols);
     }
 }
