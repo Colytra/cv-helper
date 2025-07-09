@@ -1,6 +1,8 @@
 package com.colytra.cvhelper.core;
 
-public class Size {
+import java.io.Serializable;
+
+public class Size implements Serializable {
     private int width;
     private int height;
 

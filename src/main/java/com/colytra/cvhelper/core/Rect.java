@@ -1,6 +1,8 @@
 package com.colytra.cvhelper.core;
 
-public class Rect {
+import java.io.Serializable;
+
+public class Rect implements Serializable {
     private int x;
     private int y;
     private int width;
