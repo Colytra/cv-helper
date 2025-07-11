@@ -18,7 +18,7 @@ public class Matrix {
 
     public Matrix() {}
     public Matrix(int[][] mat) {
-        this.mat = mat;
+        this.convert(mat);
     }
 
     public Matrix(int cols, int rows) {
@@ -31,6 +31,15 @@ public class Matrix {
 
     public boolean isSubMatrix(Matrix submatrix) {
         return submatrix.rows <= this.rows && submatrix.cols <= this.cols;
+    }
+
+    public static Matrix valueOf(int[][] mat) {
+        Matrix res = new Matrix(mat.length,mat[0].length);
+        int[][] matrix = new int[mat.length][mat[0].length];
+        for (int x = 0; x < mat.length; x++) {
+            System.arraycopy(matrix[x], 0, res.mat[x], 0, matrix[0].length);
+        }
+        return res;
     }
 
     public void convert(int[][] mat) {

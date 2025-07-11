@@ -33,7 +33,7 @@ public class Searcher {
                 }
             }
         }
-        return new Point();
+        return null;
     }
 
     public static List<Point> findAll(Matrix matrix, List<Matrix> subMats, ColorDifference difference, int mismatch, int skip) {
@@ -93,6 +93,101 @@ public class Searcher {
                         x++;
                     }
                 } else if (matrix.get(startCol + j, startRow + i) != subMat.get(j, i)) {
+                    x++;
+                }
+            }
+        }
+        return x <= mismatch;
+    }
+
+    public static Point findFirst(int[][] matrix, int[][] submatrix, ColorDifference different, int mismatch) {
+        int rows = matrix.length;
+        int cols = matrix[0].length;
+        int subRows = submatrix.length;
+        int subCols = submatrix[0].length;
+
+        Point point = null;
+
+        if (subRows > cols || subCols > rows) {
+            return null;
+        }
+
+        for (int i = 0; i <= rows - subRows; i++) {
+            for (int j = 0; j <= cols - subCols; j++) {
+                if (matchesAt(matrix, submatrix, i, j,different,mismatch)) {
+                    point = new Point(i,j);
+                    return point;
+                }
+            }
+        }
+
+        return point;
+    }
+
+    public static List<Point> findAll(int[][] matrix, int[][] submatrix, ColorDifference different, int mismatch, int skip) {
+        List<Point> points = new ArrayList<>();
+
+        int rows = matrix.length;
+        int cols = matrix[0].length;
+        int subRows = submatrix.length;
+        int subCols = submatrix[0].length;
+
+        if (subRows > cols || subCols > rows) {
+            return null;
+        }
+
+        boolean bool;
+
+        for (int i = 0; i <= rows - subRows; i++) {
+            bool = false;
+            for (int j = 0; j <= cols - subCols; j++) {
+                if (matchesAt(matrix, submatrix, i, j,different,mismatch)) {
+                    points.add(new Point(i,j));
+                    bool = true;
+                    j += skip;
+                }
+            }
+            if (bool) i += skip;
+        }
+
+        return points;
+    }
+
+    public static List<Point> findAll(int[][] matrix, int[][][] submatrix, ColorDifference different, int mismatch, int skip) {
+        List<Point> points = new ArrayList<>();
+
+        int rows = matrix.length;
+        int cols = matrix[0].length;
+        int subRows = submatrix[0].length;
+        int subCols = submatrix[0][0].length;
+
+        boolean bool;
+
+        for (int i = 0; i <= rows - subRows; i++) {
+            bool = false;
+            for (int j = 0; j <= cols - subCols; j++) {
+                for (int k = 0; k < submatrix.length; k++) {
+                    if (matchesAt(matrix, submatrix[k], i, j,different,mismatch)) {
+                        points.add(new Point(i,j));
+                        bool = true;
+                        j += skip;
+                    }
+                }
+            }
+            if (bool) i += skip;
+        }
+        return points;
+    }
+
+    private static boolean matchesAt(int[][] bigMatrix, int[][] smallMatrix, int startRow, int startCol, ColorDifference different, int mismatch) {
+        int x = 0;
+        if (startRow + smallMatrix.length > bigMatrix.length || startCol + smallMatrix[0].length > bigMatrix[0].length)
+            return false;
+        for (int i = 0; i < smallMatrix.length; i++) {
+            for (int j = 0; j < smallMatrix[0].length; j++) {
+                if (x > mismatch)
+                    return false;
+                if (!Color.equals(bigMatrix[startRow + i][startCol + j], smallMatrix[i][j], different)) {
                     x++;
                 }
             }
