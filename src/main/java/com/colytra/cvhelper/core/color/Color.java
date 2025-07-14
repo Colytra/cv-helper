@@ -5,6 +5,13 @@ public class Color {
         return firstColor == secondColor;
     }
 
+    public static byte getPerceivedBrightness(int rgb) {
+        int r = (rgb >> 16) & 0xFF;
+        int g = (rgb >> 8) & 0xFF;
+        int b = rgb & 0xFF;
+        return (byte) (-128 + (int)(0.299 *  r + 0.587 * g + 0.114 * b));
+    }
+
     public static int getAverageColor(int firstColor, int secondColor) {
         int a1 = (firstColor >> 24) & 0xFF;
         int r1 = (firstColor >> 16) & 0xFF;
@@ -33,9 +40,9 @@ public class Color {
         int g2 = (secondColor >> 8) & 0xFF;
         int b2 = secondColor & 0xFF;
 
-        return Math.abs(r1 - r2) <= difference.getRedDiff() &&
-                Math.abs(g1 - g2) <= difference.getGreenDiff() &&
-                Math.abs(b1 - b2) <= difference.getBlueDiff();
+        return Math.abs(r1 - r2) <= (difference.getRedDiff() + 128) &&
+                Math.abs(g1 - g2) <= (difference.getGreenDiff() + 128) &&
+                Math.abs(b1 - b2) <= (difference.getBlueDiff() + 128);
     }
 
     public static int[] unpackARGB(int argb) {

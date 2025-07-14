@@ -4,9 +4,10 @@ import com.colytra.cvhelper.core.Point;
 import com.colytra.cvhelper.core.Rect;
 import com.colytra.cvhelper.core.Size;
 
+import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class Matrix {
+public class Matrix implements Serializable {
     public static int COL_MAJOR_ORDER = 1;
     public static int ROW_MAJOR_ORDER = 0;
 
@@ -35,19 +36,25 @@ public class Matrix {
 
     public static Matrix valueOf(int[][] mat) {
         Matrix res = new Matrix(mat.length,mat[0].length);
-        int[][] matrix = new int[mat.length][mat[0].length];
-        for (int x = 0; x < mat.length; x++) {
-            System.arraycopy(matrix[x], 0, res.mat[x], 0, matrix[0].length);
+        res.setRows(mat.length);
+        res.setCols(mat[0].length);
+        res.mat = new int[mat[0].length][mat.length];
+        for (int i = 0; i < res.getRows(); i++) {
+            for (int j = 0; j < res.getCols(); j++) {
+                res.mat[j][i] = mat[i][j];
+            }
         }
         return res;
     }
 
     public void convert(int[][] mat) {
-        this.setCols(mat.length);
-        this.setRows(mat[0].length);
-        this.mat = new int[mat.length][mat[0].length];
-        for (int x = 0; x < mat.length; x++) {
-            System.arraycopy(mat[x], 0, this.mat[x], 0, mat[0].length);
+        this.setRows(mat.length);
+        this.setCols(mat[0].length);
+        this.mat = new int[mat[0].length][mat.length];
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                this.mat[j][i] = mat[i][j];
+            }
         }
     }
 
@@ -276,26 +283,5 @@ public class Matrix {
     @Override
     public String toString() {
         return "Matrix:{columns=" + this.cols + ", rows=" + this.rows + "}";
-    }
-}
-
-class MatrixAccessInvalidValue extends RuntimeException {
-    public MatrixAccessInvalidValue(String msg) {
-        super(msg);
-    }
-    public static void exception(int col, int row, Matrix matrix) {
-        int maxCols = matrix.getCols();
-        int maxRows = matrix.getRows();
-        throw new MatrixAccessInvalidValue("Position goes beyond the dimensions! column=" + col + ", row=" + row + " max size=" + maxCols + "," + maxRows);
-    }
-    public static void exception(int row, Matrix matrix) {
-        int maxCols = matrix.getCols();
-        int maxRows = matrix.getRows();
-        throw new MatrixAccessInvalidValue("Position goes beyond the dimensions! row=" + row + " max rows " + maxRows);
-    }
-    public static void exception(Matrix matrix, int col) {
-        int maxCols = matrix.getCols();
-        int maxRows = matrix.getRows();
-        throw new MatrixAccessInvalidValue("Position goes beyond the dimensions! column=" + col + " max columns " + maxCols);
     }
 }

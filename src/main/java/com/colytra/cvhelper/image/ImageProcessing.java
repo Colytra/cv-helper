@@ -16,7 +16,6 @@ public class ImageProcessing {
 
     private static Matrix compress2x(Matrix matrix) {
         Matrix res = new Matrix(matrix.getCols() / 2,matrix.getRows() / 2);
-
         for (int y = 1; y < res.getRows(); y++) {
             for (int x = 1; x < res.getCols(); x++) {
                 res.put(x - 1,y - 1, Color.getAverageColor(matrix.get(x * 2 - 1,y * 2 - 1),matrix.get((x - 1) * 2,(y - 1) * 2)));

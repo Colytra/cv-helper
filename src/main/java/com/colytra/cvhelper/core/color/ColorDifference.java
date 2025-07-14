@@ -1,43 +1,43 @@
 package com.colytra.cvhelper.core.color;
 
 public class ColorDifference {
-    private int redDiff;
-    private int greenDiff;
-    private int blueDiff;
+    private byte redDiff;
+    private byte greenDiff;
+    private byte blueDiff;
 
-    public ColorDifference(int difference) {
+    public ColorDifference(byte difference) {
         this.redDiff = difference;
         this.greenDiff = difference;
         this.blueDiff = difference;
     }
 
-    public ColorDifference(int red, int green, int blue) {
+    public ColorDifference(byte red, byte green, byte blue) {
         this.redDiff = red;
         this.greenDiff = green;
         this.blueDiff = blue;
     }
 
-    public int getBlueDiff() {
+    public byte getBlueDiff() {
         return blueDiff;
     }
 
-    public void setBlueDiff(int blueDiff) {
+    public void setBlueDiff(byte blueDiff) {
         this.blueDiff = blueDiff;
     }
 
-    public int getGreenDiff() {
+    public byte getGreenDiff() {
         return greenDiff;
     }
 
-    public void setGreenDiff(int greenDiff) {
+    public void setGreenDiff(byte greenDiff) {
         this.greenDiff = greenDiff;
     }
 
-    public int getRedDiff() {
+    public byte getRedDiff() {
         return redDiff;
     }
 
-    public void setRedDiff(int redDiff) {
+    public void setRedDiff(byte redDiff) {
         this.redDiff = redDiff;
     }
 }
